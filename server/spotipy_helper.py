@@ -27,7 +27,7 @@ def get_playlist_tracks(playlist):
     return None
 
 def get_playlist(playlist_id):
-    result = sp.playlist_items(playlist_id)
+    result = sp.playlist(playlist_id)
     return jsonify(result)
 
 def get_track_audio_features(track_id):
