@@ -43,6 +43,10 @@ def audio_features(id):
 def artist(id):
     return get_artist(id)
 
+@app.route('/artist/<id>/related', methods=['GET'])
+def related_artists(id):
+    return get_related_artists(id)
+
 @app.route('/<name>/summary', methods=['GET'])
 def wiki_summary(name):
     return get_wiki_summary(name)

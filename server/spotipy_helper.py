@@ -2,9 +2,28 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from spotipy_helper import *
 from flask import jsonify
+
+scopes = ["user-read-currently-playing",
+          "user-read-playback-state",
+          "user-modify-playback-state",
+          "playlist-read-collaborative",
+          "playlist-modify-private",
+          "playlist-read-private",
+          "playlist-modify-public",
+          "user-library-modify",
+          "user-library-read",
+          "user-read-private",
+          "user-read-email",
+          "user-follow-read",
+          "user-follow-modify",
+          "user-read-recently-played",
+          "user-read-playback-position",
+          "user-top-read"]
+scopes = " ".join(scopes)
+
 #sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="792f2c7ad9fb42f983d9b450cc780f7d",client_secret="cb9814762dce43a7b77a377ccae02ab5"))
 oauth = SpotifyOAuth(client_id="792f2c7ad9fb42f983d9b450cc780f7d",client_secret="cb9814762dce43a7b77a377ccae02ab5",
-       redirect_uri = "http://localhost:8100/callback/", scope="user-library-read user-read-currently-playing user-top-read")
+       redirect_uri = "http://localhost:8100/callback/", scope=scopes)
 sp = spotipy.Spotify(auth_manager=oauth)
 
 def refresh_token_if_expired():
@@ -45,6 +64,10 @@ def get_track_audio_analysis(track_id):
 
 def get_artist(artist_id):
     result = sp.artist(artist_id)
+    return jsonify(result)
+
+def get_related_artists(artist_id):
+    result = sp.artist_related_artists(artist_id)
     return jsonify(result)
 
 def get_artist_top_tracks(artist_id):
