@@ -1,6 +1,5 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
-from spotipy_helper import *
 from flask import jsonify
 
 scopes = ["user-read-currently-playing",
@@ -44,6 +43,35 @@ def get_playlist_tracks(playlist):
         if item['name'] == playlist:
             return get_track(sp.playlist_tracks(item['uri']))
     return None
+
+
+def search_tracks(query):
+    parsed_query = query.replace("%20"," ")
+    result = sp.search(q=parsed_query, type='track')
+    if result:
+        return jsonify(result)
+    return jsonify({})
+
+def search_albums(query):
+    parsed_query = query.replace("%20"," ")
+    result = sp.search(q=parsed_query, type='album')
+    if result:
+        return jsonify(result)
+    return jsonify({})
+
+def search_artists(query):
+    parsed_query = query.replace("%20"," ")
+    result = sp.search(q=parsed_query, type='artist')
+    if result:
+        return jsonify(result)
+    return jsonify({})
+
+def search_playlists(query):
+    parsed_query = query.replace("%20"," ")
+    result = sp.search(q=parsed_query, type='playlist')
+    if result:
+        return jsonify(result)
+    return jsonify({})
 
 def get_playlist(playlist_id):
     result = sp.playlist(playlist_id)

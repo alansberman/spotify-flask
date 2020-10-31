@@ -67,8 +67,21 @@ def user_top_tracks(term):
 def user_top_artists(term):
    return get_user_top_artists(term)
 
+@app.route('/search/<query>/tracks', methods=['GET'])
+def track_search(query):
+    return search_tracks(query)
 
+@app.route('/search/<query>/artists', methods=['GET'])
+def artist_search(query):
+    return search_artists(query)
 
+@app.route('/search/<query>/albums', methods=['GET'])
+def album_search(query):
+    return search_albums(query)
+
+@app.route('/search/<query>/playlists', methods=['GET'])
+def playlist_search(query):
+    return search_playlists(query)        
 
 @app.route('/playlists', methods=['GET'])
 def playlists():
