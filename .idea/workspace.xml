@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5d45f3d-fb1d-4e64-9abf-e8488b6586b4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/genius_helper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/wiki_helper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/spotipy_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/spotipy_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +47,8 @@
       <workItem from="1603898109253" duration="815000" />
       <workItem from="1603958256404" duration="10663000" />
       <workItem from="1604044310488" duration="1515000" />
-      <workItem from="1604057164966" duration="5165000" />
+      <workItem from="1604057164966" duration="5468000" />
+      <workItem from="1604141227748" duration="6816000" />
     </task>
     <servers />
   </component>
