@@ -129,12 +129,21 @@ def get_several_audio_features(term):
     response = sp.audio_features(ids)
     return jsonify(response)
 
+def get_features_of_playlist(playlist_id):
+    result = sp.playlist(playlist_id)
+    ids = []
+    for track in result['tracks']['items']:
+        # print(track['track'].keys())
+        ids.append(track['track']['id'])
+    response = sp.audio_features(ids)
+    return jsonify(response)
+
 
 def get_currently_playing():
     '''
         Gets the user's currently playing track
     '''
-    return sp.current_user_playing_track()
+    return jsonify(sp.current_user_playing_track())
 
 def get_user_playlists():
     '''
