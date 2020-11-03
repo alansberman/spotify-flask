@@ -1,6 +1,6 @@
 import wikipedia
 from flask import jsonify
-
+import requests
 
 def get_wiki_summary(query):
     '''
@@ -8,20 +8,28 @@ def get_wiki_summary(query):
     '''
     parsed_query = query.replace("%20"," ")
     result = wikipedia.search(parsed_query)
-    print(result)
     if result is not None:
         try:
-            print(result[0])
-            page = wikipedia.page(result[0])
             return jsonify(wikipedia.summary(result[0], sentences=10))
         except wikipedia.exceptions.DisambiguationError as e:
-            print(e.options)
             for option in e.options:
                 if "music" in option:
-                    page = wikipedia.page(option)
                     return jsonify(wikipedia.summary(option, sentences=10))
             return jsonify({})
         except wikipedia.exceptions.PageError:
             return jsonify({})
     return jsonify({})
 
+
+def get_db_artist(query):
+    parsed_query = query.replace(" ","_")
+    return requests.get(f'http://www.theaudiodb.com/api/v1/json/1/search.php?s={parsed_query}').json()
+
+    
+def get_db_album(query):
+    parsed_query = query.replace(" ","_")
+    return requests.get(f'http://www.theaudiodb.com/api/v1/json/1/search.php?s={parsed_query}').json()
+
+def get_db_track(query):
+    parsed_query = query.replace("","_")
+    return requests.get(f'http://www.theaudiodb.com/api/v1/json/1/search.php?s={parsed_query}').json()

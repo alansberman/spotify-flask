@@ -59,9 +59,20 @@ def artist_top_tracks(id):
 def album(id):
     return get_album(id)
 
+@app.route('/playlist/<playlist_id>/add-track/<track_id>', methods=['POST'])
+def add_track(playlist_id, track_id):
+    return get_album(id)
+
 @app.route('/my-top-tracks/<term>', methods=['GET'])
 def user_top_tracks(term):
    return get_user_top_tracks(term)
+
+@app.route('/my-top-tracks/<term>/features', methods=['GET'])
+def user_top_tracks_features(term):
+   return get_several_audio_features(term)
+
+
+
 
 @app.route('/my-top-artists/<term>', methods=['GET'])
 def user_top_artists(term):
@@ -87,5 +98,8 @@ def playlist_search(query):
 def playlists():
    return jsonify(get_user_playlists())
 
+@app.route('/artist/<query>/info', methods=['GET'])
+def artists_info(query):
+   return get_db_artist(query)
 if __name__ == '__main__':
     app.run()

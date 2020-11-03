@@ -1,6 +1,9 @@
 import spotipy
+from os import environ
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from flask import jsonify
+from dotenv import load_dotenv
+load_dotenv()
 
 scopes = ["user-read-currently-playing",
           "user-read-playback-state",
@@ -20,8 +23,7 @@ scopes = ["user-read-currently-playing",
           "user-top-read"]
 scopes = " ".join(scopes)
 
-#sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="792f2c7ad9fb42f983d9b450cc780f7d",client_secret="cb9814762dce43a7b77a377ccae02ab5"))
-oauth = SpotifyOAuth(client_id="792f2c7ad9fb42f983d9b450cc780f7d",client_secret="cb9814762dce43a7b77a377ccae02ab5",
+oauth = SpotifyOAuth(client_id=environ.get("SPOTIFY_CLIENT_ID"),client_secret=environ.get("SPOTIFY_CLIENT_SECRET"),
        redirect_uri = "http://localhost:8100/callback/", scope=scopes)
 sp = spotipy.Spotify(auth_manager=oauth)
 
@@ -107,6 +109,10 @@ def get_album(album_id):
     result = sp.album(album_id)
     return jsonify(result)
 
+def add_track_to_playlist(playlist_id, track_id):
+    result = sp.playlist_add_items(playlist_id, [track_id])
+    return jsonify(result)
+
 def get_user_top_tracks(term):
     result = sp.current_user_top_tracks(time_range=term,limit=50)
     return jsonify(result)
@@ -114,6 +120,14 @@ def get_user_top_tracks(term):
 def get_user_top_artists(term):
     result = sp.current_user_top_artists(time_range=term,limit=50)
     return jsonify(result)
+
+def get_several_audio_features(term):
+    result = sp.current_user_top_tracks(time_range=term,limit=50)
+    ids = []
+    for track in result['items']:
+        ids.append(track['id'])
+    response = sp.audio_features(ids)
+    return jsonify(response)
 
 
 def get_currently_playing():
