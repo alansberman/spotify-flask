@@ -12,20 +12,25 @@ scopes = ["user-read-currently-playing",
           "playlist-modify-private",
           "playlist-read-private",
           "playlist-modify-public",
+          "ugc-image-upload",
+          "streaming",
+          "app-remote-control",
           "user-library-modify",
           "user-library-read",
+          "app-remote-control",
           "user-read-private",
           "user-read-email",
           "user-follow-read",
-          "user-follow-modify",
-          "user-read-recently-played",
-          "user-read-playback-position",
+          #   "user-follow-modify",
+          #   "user-read-recently-played",
+          #   "user-read-playback-position",
           "user-top-read"]
 scopes = " ".join(scopes)
 
-oauth = SpotifyOAuth(client_id=environ.get("SPOTIFY_CLIENT_ID"),client_secret=environ.get("SPOTIFY_CLIENT_SECRET"),
-       redirect_uri = "http://localhost:8100/callback/", scope=scopes)
+oauth = SpotifyOAuth(client_id=environ.get("SPOTIFY_CLIENT_ID"), client_secret=environ.get("SPOTIFY_CLIENT_SECRET"),
+                     redirect_uri="http://localhost:8080/callback", scope=scopes)
 sp = spotipy.Spotify(auth_manager=oauth)
+
 
 def refresh_token_if_expired():
     token = oauth.get_cached_token()
@@ -48,40 +53,56 @@ def get_playlist_tracks(playlist):
 
 
 def search_tracks(query):
-    parsed_query = query.replace("%20"," ")
+    parsed_query = query.replace("%20", " ")
     result = sp.search(q=parsed_query, type='track')
     if result:
         return jsonify(result)
     return jsonify({})
 
+
 def search_albums(query):
-    parsed_query = query.replace("%20"," ")
+    parsed_query = query.replace("%20", " ")
     result = sp.search(q=parsed_query, type='album')
     if result:
         return jsonify(result)
     return jsonify({})
 
+
 def search_artists(query):
-    parsed_query = query.replace("%20"," ")
+    parsed_query = query.replace("%20", " ")
     result = sp.search(q=parsed_query, type='artist')
     if result:
         return jsonify(result)
     return jsonify({})
 
+
 def search_playlists(query):
-    parsed_query = query.replace("%20"," ")
+    parsed_query = query.replace("%20", " ")
     result = sp.search(q=parsed_query, type='playlist')
     if result:
         return jsonify(result)
     return jsonify({})
 
+
+def get_genres():
+    result = sp.recommendation_genre_seeds()
+    return jsonify(result)
+
+
+def get_recommendations(seed_artists, seed_genres, seed_tracks):
+    result = sp.recommendations(seed_artists, seed_genres, seed_tracks)
+    return jsonify(result)
+
+
 def get_playlist(playlist_id):
     result = sp.playlist(playlist_id)
     return jsonify(result)
 
+
 def get_track_audio_features(track_id):
     result = sp.audio_features(track_id)
     return jsonify(result)
+
 
 def get_track_details(track_id):
     result = sp.track(track_id)
@@ -92,13 +113,16 @@ def get_track_audio_analysis(track_id):
     result = sp.audio_analysis(track_id)
     return jsonify(result)
 
+
 def get_artist(artist_id):
     result = sp.artist(artist_id)
     return jsonify(result)
 
+
 def get_related_artists(artist_id):
     result = sp.artist_related_artists(artist_id)
     return jsonify(result)
+
 
 def get_artist_top_tracks(artist_id):
     result = sp.artist_top_tracks(artist_id)
@@ -109,25 +133,30 @@ def get_album(album_id):
     result = sp.album(album_id)
     return jsonify(result)
 
+
 def add_track_to_playlist(playlist_id, track_id):
     result = sp.playlist_add_items(playlist_id, [track_id])
     return jsonify(result)
 
+
 def get_user_top_tracks(term):
-    result = sp.current_user_top_tracks(time_range=term,limit=50)
+    result = sp.current_user_top_tracks(time_range=term, limit=50)
     return jsonify(result)
+
 
 def get_user_top_artists(term):
-    result = sp.current_user_top_artists(time_range=term,limit=50)
+    result = sp.current_user_top_artists(time_range=term, limit=50)
     return jsonify(result)
 
+
 def get_several_audio_features(term):
-    result = sp.current_user_top_tracks(time_range=term,limit=50)
+    result = sp.current_user_top_tracks(time_range=term, limit=50)
     ids = []
     for track in result['items']:
         ids.append(track['id'])
     response = sp.audio_features(ids)
     return jsonify(response)
+
 
 def get_features_of_playlist(playlist_id):
     result = sp.playlist(playlist_id)
@@ -145,12 +174,14 @@ def get_currently_playing():
     '''
     return jsonify(sp.current_user_playing_track())
 
+
 def get_user_playlists():
     '''
         Gets the user's currently playing track
     '''
-    #refresh_token_if_expired()
+    # refresh_token_if_expired()
     return sp.current_user_playlists()
+
 
 def get_track(tracks):
     '''
@@ -160,7 +191,11 @@ def get_track(tracks):
     '''
     tracklist = []
     for track in tracks['items']:
-        song = (track['track']['name'], track['track']['artists'][0]['name'], track['track']['uri'])
+        song = (track['track']['name'], track['track']
+                ['artists'][0]['name'], track['track']['uri'])
         tracklist.append(song)
     return jsonify(tracklist)
 
+
+def authorize():
+    return jsonify(oauth.get_authorization_code())
